@@ -20,6 +20,18 @@
 use warnings;
 use strict;
 
+my $prefix = $ARGV[0];
+my $binpath;
+
+if ($prefix) {
+    $binpath = "/usr/lib/systemd/tests";
+}
+else
+{
+    $prefix = "test";
+    $binpath = '.';
+}
+
 BEGIN {
     my $EXIT_TEST_SKIP = 77;
 
@@ -37,15 +49,15 @@ BEGIN {
 # here that actually is a tmpfs.
 $ENV{"SYSTEMD_DEVICE_VERIFY_SYSFS"}="0";
 
-my $udev_bin            = "./test-udev";
+my $udev_bin            = "$binpath/test-udev";
 my $valgrind            = 0;
 my $gdb                 = 0;
 my $strace              = 0;
 my $udev_bin_valgrind   = "valgrind --tool=memcheck --leak-check=yes --track-origins=yes --quiet $udev_bin";
 my $udev_bin_gdb        = "gdb --args $udev_bin";
 my $udev_bin_strace     = "strace -efile $udev_bin";
-my $udev_run            = "test/run";
-my $udev_tmpfs          = "test/tmpfs";
+my $udev_run            = "$prefix/run";
+my $udev_tmpfs          = "$prefix/tmpfs";
 my $udev_sys            = "${udev_tmpfs}/sys";
 my $udev_dev            = "${udev_tmpfs}/dev";
 my $udev_rules_dir      = "$udev_run/udev/rules.d";
